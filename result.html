@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WeatherNow</title>
+    <link rel="icon" href="./assets/images/icon.png" type="icon">
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body>
+    <div
+        class="result fixed bg-gradient-to-b from-[#192241] to-[#9043aa] h-[100vh] w-[100vw] flex justify-center items-center">
+        <div class="card  relative md:w-[36rem] w-[90%] h-[40rem] bg-white rounded-xl bg-opacity-5 flex flex-col items-center">
+            <img src="./assets/images/Clear.png" id="img" alt="" class="w-52 relative mt-[-5rem] ml-[10rem]">
+            <!-- <span id="weatherCond" class="text-4xl absolute left-10 text-gray-400 font-extrabold uppercase mt-32">Sunny</span> -->
+            <div class="temp">
+                <span id="temp" class="text-8xl ml-10 text-gray-200 font-extrabold"></span>
+                <span class="text-8xl text-gray-200">&deg;</span>
+            </div>
+            <span class="grid grid-cols-2 gap-24 mt-12 w-full px-16">
+                <div class="min flex flex-col items-center gap-2">
+                    <span class="text-4xl font-semibold text-gray-300">min</span>
+                    <div class="text ml-3 flex">
+                        <span id="minTemp" class="text-3xl text-gray-200 font-extrabold"></span>
+                        <span class="text-3xl text-gray-200">&deg;</span>
+                    </div>
+                </div>
+                <div class="max flex flex-col items-center gap-2">
+                    <span class="text-4xl font-semibold text-gray-300">max</span>
+                    <div class="text ml-3 flex">
+                        <span id="maxTemp" class="text-3xl text-gray-200 font-extrabold"></span>
+                        <span class="text-3xl text-gray-200">&deg;</span>
+                    </div>
+                </div>
+                <div class="humidity mt-[-3rem] text-gray-300 font-semibold flex flex-col gap-2 items-center">
+                    <span class="text-3xl">humid</span>
+                    <span id="hum" class="text-3xl uppercase font-bold text-white"></span>
+                </div>
+                <div class="humidity text-gray-300 flex flex-col gap-2 items-center mt-[-3rem]">
+                    <span class="text-3xl font-semibold">visible</span>
+                    <span id="vis" class="text-3xl uppercase font-bold text-white"></span>
+                </div>
+            </span>
+            <button id="exit"
+                class="absolute text-gray-700 bg-yellow-500 py-3 rounded-full font-bold px-16 text-3xl bottom-5">EXIT</button>
+        </div>
+    </div>
+
+
+    <script>
+        const apiKey = '0175e97b8b4be819a5534b14be49f6e7';
+
+        window.onload = function () {
+            const cityName = localStorage.getItem("city");
+            const url = `https://api.openweathermap.org/data/2.5/weather?q=${cityName}&appid=${apiKey}`;
+            const img = document.getElementById('img');
+            // const weatherCond = document.getElementById("weatherCond");
+            const temp = document.getElementById("temp");
+            const minTemp = document.getElementById('minTemp');
+            const maxTemp = document.getElementById('maxTemp');
+            const hum = document.getElementById('hum');
+            const vis = document.getElementById('vis');
+            const exit = document.getElementById('exit');
+
+            exit.addEventListener('click', function () {
+                window.location.href = 'index.html';
+            })
+
+            const images = ["./assets//images/Clear.png", "./assets//images/Cloudy.png", "./assets//images/Mist.png", "./assets//images/Rain.png", "./assets//images/Snow.png", "./assets//images/Storm.png"];
+
+            fetch(url)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log(data);
+
+                    const weather = data.weather[0].description;
+                    const temperature = Math.floor(data.main.temp - 273);
+                    const humidity = data.main.humidity;
+                    const visu = data.visibility / 1000;
+                    const tempP2 = temperature + 2;
+                    const tempM2 = temperature - 2;
+
+                    console.log(weather);
+                    console.log(visu);
+                    // weatherCond.textContent = weather;
+                    temp.textContent = temperature;
+                    minTemp.textContent = tempM2;
+                    maxTemp.textContent = tempP2;
+                    hum.textContent = humidity;
+                    vis.textContent = visu;
+
+                    switch (weather) {
+                        case "broken clouds":
+                            img.setAttribute('src', images[2]);
+                            break
+                        case "clear sky":
+                            img.setAttribute('src', images[0]);
+                            break;
+                        case "light snow":
+                            img.setAttribute('src', images[4]);
+                            break;
+                        case "overcast clouds":
+                            img.setAttribute('src', images[2]);
+                            break;
+                        case "snow":
+                            img.setAttribute('src', images[4]);
+                            break;
+                        case "few clouds":
+                            img.setAttribute('src', images[1]);
+                            break;
+                        case "clouds":
+                            img.setAttribute('src', images[1]);
+                            break;
+                        default:
+                            img.setAttribute('src', images[2]);
+                    }   
+                })
+                .catch(error => {
+                    console.error('Error fetching data:', error);
+                });
+        }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WeatherNow</title>
+    <link rel="icon" href="./assets/images/icon.png" type="icon">
+    <link rel="stylesheet" href="index.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="">
+
+    <div class="app bg-gradient-to-b from-[#192241] to-[#9043aa] fixed h-[100vh] w-[100vw] flex justify-center items-center">
+        <div class="card relative md:w-[32rem] sm:w-[90%] h-[34rem] bg-white rounded-xl bg-opacity-5">
+            <img src="./assets//images/Storm.png" alt="" class="w-52 relative mt-[-6rem] ml-[10rem]">
+            <div class="input absolute flex flex-col items-center bottom-0 w-full h-[70%] mt-4 text-center flex flex-col">
+                <span class="Text font-bold uppercase text-3xl text-gray-200">Your Location</span>
+                <input type="text" id="country" placeholder="Country Name..." class="bg-white bg-opacity-20 Text text-white font-semibold tracking-tightest mt-10 outline-none px-4 text-xl h-14 w-[80%] rounded-xl">
+                <input type="text" id="city" placeholder="City Name..." class="bg-white bg-opacity-20 Text text-white font-semibold tracking-tightest mt-14 outline-none px-4 text-xl h-14 w-[80%] rounded-xl">
+                <button id="buttonTap" class="absolute text-gray-700 bg-yellow-500 py-3 rounded-full font-bold px-16 text-3xl bottom-3">Submit</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const button = document.getElementById('buttonTap');
+        const ctr = document.getElementById('country');
+        const ct = document.getElementById('city');
+
+        button.addEventListener('click', function() {
+            const country = ctr.value;
+            const city = ct.value;
+
+            localStorage.setItem("country", country);
+            localStorage.setItem("city", city);
+
+            window.location.href = 'result.html';
+        })
+    </script>
+</body>
+
+</html>
